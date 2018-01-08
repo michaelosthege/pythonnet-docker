@@ -1,0 +1,5 @@
+FROM python:${PYTHON_VERSION}-jessie
+
+${MONO_SNIPPET}
+
+${PYTHONNET_SNIPPET}
