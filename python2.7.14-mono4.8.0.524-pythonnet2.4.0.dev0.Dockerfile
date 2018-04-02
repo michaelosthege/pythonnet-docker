@@ -8,6 +8,9 @@ FROM python:2.7.14-jessie
 # Jessie) instead.
 # See https://stackoverflow.com/questions/29982959/how-to-install-mono-4-0-1-on-debian-8
 
+# See https://bugzilla.xamarin.com/show_bug.cgi?id=24902 for why the "/." is
+# included in the following statement.
+
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
   && echo "deb http://download.mono-project.com/repo/debian wheezy/snapshots/4.8.0.524/. main" > /etc/apt/sources.list.d/mono-official.list \
   && echo "deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main" >> /etc/apt/sources.list.d/mono-official.list \
