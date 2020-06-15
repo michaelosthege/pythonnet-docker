@@ -1,7 +1,5 @@
 # RUN pip install pycparser pythonnet==${PYTHONNET_VERSION} (from Github)
 
-# pythonnet 2.4.0 is still in development and not available on PyPI yet
-
 RUN pip install pycparser \
   && git clone https://github.com/pythonnet/pythonnet \
   && python pythonnet/setup.py bdist_wheel \

@@ -1,4 +1,5 @@
-FROM python:${PYTHON_VERSION}-jessie
+FROM python:${PYTHON_VERSION}-stretch
+LABEL maintainer="jn@jonasneubert.com"
 
 ${MONO_SNIPPET}
 

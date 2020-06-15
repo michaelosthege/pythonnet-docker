@@ -52,26 +52,22 @@ print("Snippets found: %s" % ", ".join(snippets.keys()))
 
 combinations = itertools.product(python_versions, mono_versions, pythonnet_versions)
 for python_version, mono_version, pythonnet_version in combinations:
-    # skip incompatible combinations of Mono and pythonnet
-    if mono_version.startswith('5') and not pythonnet_version.startswith('2.4'):
-        continue
-
     # select and build the right snippets for Mono and Pythonnet
-    if pythonnet_version.startswith('2.4'):
+    if False:
+        # This branch never runs but is kept for reference in case we need to
+        # install from Github "master" again in future. This was necessary when
+        # 2.4.0 was in pre-release state for a prolonged amount of time.
         pythonnet_snippet_name = 'pythonnet-from-github'
     else:
         pythonnet_snippet_name = 'pythonnet-from-pypi'
     pythonnet_snippet = snippets[pythonnet_snippet_name].safe_substitute(
         PYTHONNET_VERSION=pythonnet_version)
 
-    mono_snippet_name = 'mono5' if mono_version.startswith('5') else 'mono4'
-    mono_snippet = snippets[mono_snippet_name].safe_substitute(
-        MONO_VERSION=mono_version)
+    mono_snippet = snippets['mono'].safe_substitute(MONO_VERSION=mono_version)
 
     # build Dockerfile filename and content
     fname = (
-        f"python{python_version}-mono{mono_version}-"
-        f"pythonnet{pythonnet_version}.Dockerfile"
+        f"python{python_version}-mono{mono_version}-pythonnet{pythonnet_version}"
     )
     content = template.safe_substitute(
         PYTHON_VERSION=python_version,

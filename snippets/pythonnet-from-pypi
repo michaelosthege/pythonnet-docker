@@ -1,7 +1,5 @@
 # Pythonnet: ${PYTHONNET_VERSION} (from PyPI)
-
-# Note: pycparser must be installed before pythonnet can be built, therefore
-# pip install pycparser pythonnet
+# Note: pycparser must be installed before pythonnet can be built
 
 RUN pip install pycparser \
   && pip install pythonnet==${PYTHONNET_VERSION}

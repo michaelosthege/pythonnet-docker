@@ -26,7 +26,7 @@ Inside the Python shell:
 ## Approach
 
 The method for installing is slightly different for each of the three main components of this image (Python, Mono, pythonnet):
-* **Python**: Because an actively maintained and "official" [Dockerhub repository](https://hub.docker.com/_/python/) covering a range of Python versions exists, these Python images are used as base images. The `-jessie` variant of the Python Docker images is used because the slimmer variants (`-slim` and `-alpine`) do not include the tooling [required](https://github.com/mono/docker/issues/56) for the Mono and pythonnet installs later.
+* **Python**: Because an actively maintained and "official" [Dockerhub repository](https://hub.docker.com/_/python/) covering a range of Python versions exists, these Python images are used as base images. The `-stretch` variant of the Python Docker images is used because the slimmer variants (`-slim` and `-alpine`) do not include the tooling [required](https://github.com/mono/docker/issues/56) for the Mono and pythonnet installs later.
 * **Mono** provides [succinct documentation for installing on Debian systems](http://www.mono-project.com/download/#download-lin-debian), including [steps for installing older releases](http://www.mono-project.com/docs/getting-started/install/linux/#accessing-older-releases).
 * **pythonnet** is the smallest (by contributor count) of the three project and, therefore, does not come with the luxery of comprehensive installation documentation for a wide range of platforms. Binary packages only exist for Windows, but installing pythonnet on a Linux based platform with Mono involves building from source. Gladly, the project's issue tracker contains a wealth of detailed reports of problems and solutions.
 
@@ -44,17 +44,9 @@ Currently, there are no abbreviated version tags (e.g. `3.6` pointing at `3.6.4`
 [Mono versioning](http://www.mono-project.com/docs/about-mono/versioning/) is non-obvious to the newcomer.
 I make no claim to understand the details of it and use the [Mono Project's own Docker repository](https://hub.docker.com/r/library/mono/) as guidance for which versions are current.
 
-There are no releases of Mono 4 available for Debian 8.0 (Jessie):
-http://download.mono-project.com/repo/debian/dists/jessie/snapshots/
-https://stackoverflow.com/questions/29982959/how-to-install-mono-4-0-1-on-debian-8
-
-For ease of maintaining Dockerfiles for many combinations of component versions, the Dockerfile does not specify the version suffix (the `xxx` in `apt-get install mono-complete=5.4.1-xxx`).
-
 The test suite of the `master` branch of pythonnet currently tests against Mono 5.2.x, with [a note](https://github.com/pythonnet/pythonnet/commit/75e5231c15ff132e650d76859e676567c0b8b5c7) stating that 5.4.0 is considered "broken" by pythonnet.
 
 ### pythonnet
-
-pythonnet 2.3.0 requires Mono >= 4.8.0 and is not compatible with Mono 5.x ([source 1]((https://github.com/pythonnet/pythonnet/issues/504#issuecomment-311219019)), [source 2](https://github.com/pythonnet/pythonnet/issues/504), [source 3](https://github.com/pythonnet/pythonnet/issues/470)).
 
 The latest code on the `master` branch of the Github repository is compatible with Mono 5.x and will be released in version 2.4.0 of pythonnet.
 However, pythonnet 2.4.0 is still in development and not yet available on PyPI.
