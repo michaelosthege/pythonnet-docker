@@ -8,7 +8,7 @@ from string import Template
 
 def get_lines(cfg_path):
     with cfg_path.open() as cfg_file:
-        return [l.strip() for l in cfg_file.readlines()]
+        return [line.strip() for line in cfg_file.readlines()]
 
 
 def get_template(template_path):
@@ -17,10 +17,10 @@ def get_template(template_path):
 
 
 parser = argparse.ArgumentParser(description=(
-	'Generate Dockerfiles for all permutations of Python, Mono, and pythonnet '
-	'versions.'))
+    'Generate Dockerfiles for all permutations of Python, Mono, and pythonnet '
+    'versions.'))
 parser.add_argument(
-    '--outdir', type=str, default=".",
+    '--outdir', type=str, default="_dockerfiles",
     help='Output directory for Dockerfiles')
 parser.add_argument(
     '--configdir', type=str, default="config",
@@ -75,5 +75,7 @@ for python_version, mono_version, pythonnet_version in combinations:
         PYTHONNET_SNIPPET=pythonnet_snippet,
     )
     # write Dockerfile
-    with (outdir / fname).open('w') as out_file:
+    outfile = outdir / fname
+    with outfile.open('w') as out_file:
+        print(f"Writing {outfile}")
         out_file.write(content)
