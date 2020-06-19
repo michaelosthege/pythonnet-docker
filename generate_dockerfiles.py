@@ -68,8 +68,6 @@ for cfg in configdata:
         f"python{python_version}-mono{mono_version}-pythonnet{pythonnet_version}"
     )
 
-    debian_version = "buster" if python_version.startswith("3.8") else "stretch"
-
     content = template.safe_substitute(
         DEBIAN_VERSION=debian_version,
         PYTHON_VERSION=python_version,
