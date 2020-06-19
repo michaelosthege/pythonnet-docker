@@ -1,0 +1,5 @@
+debian_version,python_version,mono_version,pythonnet_version
+stretch,2.7.18,5.20,2.4.0
+stretch,3.5.9,5.20,2.4.0
+stretch,3.6.10,5.20,2.4.0
+stretch,3.7.7,5.20,2.4.0

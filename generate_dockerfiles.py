@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
-import itertools
+import csv
 from pathlib import Path
 from string import Template
 
@@ -23,8 +23,8 @@ parser.add_argument(
     '--outdir', type=str, default="_dockerfiles",
     help='Output directory for Dockerfiles')
 parser.add_argument(
-    '--configdir', type=str, default="config",
-    help='Directory with configuration files')
+    '--configfile', type=str, default="config.csv",
+    help='Comma separated values file with configurations')
 parser.add_argument(
     '--snippetsdir', type=str, default="snippets",
     help='Directory with template snippets')
@@ -32,26 +32,24 @@ parser.add_argument(
 args = parser.parse_args()
 
 outdir = Path(args.outdir)
-configdir = Path(args.configdir)
+configfile = Path(args.configfile)
 snippetsdir = Path(args.snippetsdir)
 assert outdir.is_dir()
-assert configdir.is_dir()
+assert configfile.is_file()
 assert snippetsdir.is_dir()
 
-python_versions = get_lines(configdir / "python_versions")
-mono_versions = get_lines(configdir / "mono_versions")
-pythonnet_versions = get_lines(configdir / "pythonnet_versions")
+with configfile.open(newline='') as csvfile:
+    configdata = [row for row in csv.DictReader(csvfile)]
+
 template = get_template(Path("Dockerfile.template"))
-snippets = {
-    f.name: get_template(f) for f in snippetsdir.iterdir() if not f.is_dir()}
+snippets = {f.name: get_template(f) for f in snippetsdir.iterdir() if not f.is_dir()}
 
-print("Python tags: %s" % ", ".join(python_versions))
-print("Mono versions: %s" % ", ".join(mono_versions))
-print("Pythonnet versions: %s" % ", ".join(pythonnet_versions))
-print("Snippets found: %s" % ", ".join(snippets.keys()))
+for cfg in configdata:
+    debian_version = cfg["debian_version"]
+    python_version = cfg["python_version"]
+    mono_version = cfg["mono_version"]
+    pythonnet_version = cfg["pythonnet_version"]
 
-combinations = itertools.product(python_versions, mono_versions, pythonnet_versions)
-for python_version, mono_version, pythonnet_version in combinations:
     # select and build the right snippets for Mono and Pythonnet
     if False:
         # This branch never runs but is kept for reference in case we need to
@@ -69,7 +67,11 @@ for python_version, mono_version, pythonnet_version in combinations:
     fname = (
         f"python{python_version}-mono{mono_version}-pythonnet{pythonnet_version}"
     )
+
+    debian_version = "buster" if python_version.startswith("3.8") else "stretch"
+
     content = template.safe_substitute(
+        DEBIAN_VERSION=debian_version,
         PYTHON_VERSION=python_version,
         MONO_SNIPPET=mono_snippet,
         PYTHONNET_SNIPPET=pythonnet_snippet,
