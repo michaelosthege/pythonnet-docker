@@ -1,0 +1,53 @@
+name: build
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/build.yml"
+      - "_dockerfiles/*"
+      - "snippets/*"
+      - "*.sh"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/build.yml"
+      - "_dockerfiles/*"
+      - "snippets/*"
+      - "*.sh"
+
+jobs:
+  build-image:
+    strategy:
+      matrix:
+        dockerfile:
+          - python3.9.16-mono6.12-pythonnet3.0.1
+          - python3.10.9-mono6.12-pythonnet3.0.1
+          - python3.11.1-mono6.12-pythonnet3.0.1
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Build and load image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: _dockerfiles/${{ matrix.dockerfile }}
+          load: true
+          tags: jonemo/pythonnet:${{ matrix.dockerfile }}
+
+      - name: Test the image
+        run: |
+           docker run --rm -v $(pwd)/tests:/tmp/tests jonemo/pythonnet:${{ matrix.dockerfile }} bash -c "/tmp/tests/hello_mono.sh"
+           docker run --rm -v $(pwd)/tests:/tmp/tests jonemo/pythonnet:${{ matrix.dockerfile }} bash -c "python /tmp/tests/import_clr.py"
+      # - name: Login to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # - name: Build and push
+      #   uses: docker/build-push-action@v3
+      #   with:
+      #     context: .
+      #     push: true
+      #     file: _dockerfiles/${{ matrix.dockerfile }}
+      #     tags: jonemo/pythonnet:${{ matrix.dockerfile }}
