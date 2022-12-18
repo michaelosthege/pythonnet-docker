@@ -7,9 +7,8 @@ Docker images with various combinations of Python, Mono, and pythonnet versions.
 Get a Python shell:
 
 ```
-$ docker run -it --rm jonemo/pythonnet:python3.6.4-mono4.8.0.524-pythonnet2.3.0 python
-Python 3.6.4 (default, Dec 21 2017, 01:35:12)
-[GCC 4.9.2] on linux
+$ docker run -it --rm mosthege/pythonnet:python3.11.1-mono6.12-pythonnet3.0.1 python
+Python 3.11.1 (main, Dec  8 2022, 00:05:00) [GCC 10.2.1 20210110] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
@@ -17,6 +16,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 Inside the Python shell:
 
 ```
+>>> import clr
 >>> from System import Environment
 >>> print(Environment.MachineName)
 79000da3c53a
