@@ -12,8 +12,8 @@ jobs:
       matrix:
         dockerfile:
           - python3.9.16-mono6.12-pythonnet3.0.1
-          - python3.10.9-mono6.12-pythonnet3.0.1
-          - python3.11.1-mono6.12-pythonnet3.0.1
+          - python3.10.10-mono6.12-pythonnet3.0.1
+          - python3.11.2-mono6.12-pythonnet3.0.1
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
